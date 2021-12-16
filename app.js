@@ -36,7 +36,7 @@ function createTable(tableName) {
   const sql =
     "CREATE TABLE " +
     tableName +
-    "(id int AUTO_INCREMENT, name VARCHAR(255), description VARCHAR(255), PRIMARY KEY (id))";
+    "(id int AUTO_INCREMENT, name VARCHAR(255), des VARCHAR(255), PRIMARY KEY (id))";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -44,6 +44,17 @@ function createTable(tableName) {
       console.log("Table", tableName, "created.");
     }
   });
+}
+
+// DELETE TABLE
+function deleteTable(tableName) {
+  const sql = "DROP TABLE " + tableName;
+  db.query(sql, (err,result) => {
+    if (err) {console.log(err)}
+    else {
+      console.log("Table", tableName, "deleted.");
+    }
+  })
 }
 
 app
@@ -64,9 +75,9 @@ app
   // add a new item
   .post(function (req, res) {
     const itemName = req.body.name;
-    const itemDescription = req.body.description;
+    const itemDescription = req.body.des;
     db.query(
-      "INSERT INTO items (name, description) values (?,?)",
+      "INSERT INTO items (name, des) values (?,?)",
       [itemName, itemDescription],
       (err, result) => {
         if (err) {
@@ -111,9 +122,9 @@ app
   // update one specfic item
   .patch(function (req, res) {
     const itemId = req.params.itemId;
-    const newDescription = req.body.description;
+    const newDescription = req.body.des;
     db.query(
-      "UPDATE items SET description = ? WHERE id = ?",
+      "UPDATE items SET des = ? WHERE id = ?",
       [newDescription, itemId],
       (err, result) => {
         if (err) {
